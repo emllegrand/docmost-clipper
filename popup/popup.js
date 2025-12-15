@@ -312,8 +312,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function importPage(baseUrl, spaceId, file) {
         const formData = new FormData();
-        formData.append('file', file);
+        // Append text fields FIRST for better streaming parser compatibility
         formData.append('spaceId', spaceId);
+        formData.append('file', file);
 
         const response = await fetch(`${baseUrl}/api/pages/import`, {
             method: 'POST',
