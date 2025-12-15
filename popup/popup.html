@@ -74,6 +74,20 @@
       <button id="clip-btn" class="primary-btn">Clip to Docmost</button>
       <button id="settings-btn" class="secondary-btn">Settings</button>
     </div>
+
+    <!-- Create Space View -->
+    <div id="create-space-view" class="hidden">
+      <h3>Create New Space</h3>
+      <div class="form-group">
+        <label for="new-space-name">Space Name</label>
+        <input type="text" id="new-space-name" placeholder="e.g. Personal Projects">
+      </div>
+      <div class="form-group">
+        <label style="font-size: 11px; color: #57606a;">Slug: <span id="new-space-slug"></span></label>
+      </div>
+      <button id="confirm-create-space" class="primary-btn">Create Space</button>
+      <button id="cancel-create-space" class="secondary-btn">Cancel</button>
+    </div>
   </div>
   <script src="popup.js"></script>
 </body>

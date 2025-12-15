@@ -3,7 +3,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const views = {
         settings: document.getElementById('settings-view'),
-        clipper: document.getElementById('clipper-view')
+        clipper: document.getElementById('clipper-view'),
+        createSpace: document.getElementById('create-space-view')
     };
 
     // UI Elements
@@ -18,6 +19,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         clipSelection: document.getElementById('clip-selection'),
         userNotes: document.getElementById('user-notes'),
 
+        // New Space Inputs
+        newSpaceName: document.getElementById('new-space-name'),
+        newSpaceSlug: document.getElementById('new-space-slug'),
+
         loginForm: document.getElementById('login-form'),
         logoutSection: document.getElementById('logout-section')
     };
@@ -27,7 +32,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         disconnect: document.getElementById('disconnect-btn'),
         clip: document.getElementById('clip-btn'),
         settings: document.getElementById('settings-btn'),
-        exitSettings: document.getElementById('exit-settings-btn')
+        exitSettings: document.getElementById('exit-settings-btn'),
+
+        // New Space Buttons
+        confirmCreateSpace: document.getElementById('confirm-create-space'),
+        cancelCreateSpace: document.getElementById('cancel-create-space')
     };
 
     const statusMsg = document.getElementById('status-message');
@@ -125,9 +134,88 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Space Selection Change Listener (for New Space)
+    inputs.spaceSelect.addEventListener('change', (e) => {
+        if (e.target.value === '__NEW_SPACE__') {
+            showView('createSpace');
+            inputs.newSpaceName.value = '';
+            inputs.newSpaceSlug.textContent = '';
+            inputs.newSpaceName.focus();
+        }
+    });
+
+    // New Space Name Input Listener (Auto-slug)
+    inputs.newSpaceName.addEventListener('input', (e) => {
+        const name = e.target.value;
+        const slug = name.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphen
+            .replace(/^-+|-+$/g, '');   // Trim hyphens
+        inputs.newSpaceSlug.textContent = slug;
+    });
+
+    // Cancel Create Space
+    buttons.cancelCreateSpace.addEventListener('click', () => {
+        showView('clipper');
+        // Reset selection to previous valid one or default
+        // For simplicity, just reset to empty or last stored
+        chrome.storage.local.get(['lastSpaceId']).then((stored) => {
+            if (stored.lastSpaceId) {
+                inputs.spaceSelect.value = stored.lastSpaceId;
+            } else {
+                inputs.spaceSelect.value = "";
+            }
+            // If reset value is still new space (e.g. if last was null), select first option
+            if (inputs.spaceSelect.value === '__NEW_SPACE__') {
+                inputs.spaceSelect.selectedIndex = 0;
+            }
+        });
+    });
+
+    // Confirm Create Space
+    buttons.confirmCreateSpace.addEventListener('click', async () => {
+        const name = inputs.newSpaceName.value.trim();
+        const slug = inputs.newSpaceSlug.textContent;
+
+        if (!name || name.length < 2) {
+            showStatus('Name must be at least 2 characters.', 'error');
+            return;
+        }
+
+        buttons.confirmCreateSpace.disabled = true;
+        buttons.confirmCreateSpace.textContent = 'Creating...';
+
+        try {
+            const { docmostUrl } = await chrome.storage.local.get(['docmostUrl']);
+
+            // Create Space
+            const newSpaceResponse = await createSpace(docmostUrl, name, slug);
+
+            // Refresh Spaces
+            const spaces = await fetchSpaces(docmostUrl);
+
+            // Update UI
+            showView('clipper');
+
+            // Populate and Select New Space
+            // We need to find the space with the slug we just created
+            const newSpace = spaces.find(s => s.slug === slug);
+            populateSpaces(spaces, newSpace ? newSpace.id : null);
+
+            showStatus(`Space "${name}" created!`, 'success');
+
+        } catch (err) {
+            console.error(err);
+            showStatus('Failed to create space: ' + err.message, 'error');
+        } finally {
+            buttons.confirmCreateSpace.disabled = false;
+            buttons.confirmCreateSpace.textContent = 'Create Space';
+        }
+    });
+
+
     buttons.clip.addEventListener('click', async () => {
         const spaceId = inputs.spaceSelect.value;
-        if (!spaceId) {
+        if (!spaceId || spaceId === '__NEW_SPACE__') {
             showStatus('Please select a Space.', 'error');
             return;
         }
@@ -216,9 +304,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function showView(viewName) {
-        views.settings.classList.add('hidden');
-        views.clipper.classList.add('hidden');
-        views[viewName].classList.remove('hidden');
+        Object.values(views).forEach(el => el && el.classList.add('hidden'));
+        if (views[viewName]) {
+            views[viewName].classList.remove('hidden');
+        }
         statusMsg.classList.add('hidden');
     }
 
@@ -247,9 +336,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
 
                 } else {
-                    // Handle error fetching content?
-                    // Just leave inputs empty or show error?
-                    // Ideally retry or show status
+                    // Handle error fetching content
                 }
             }
         });
@@ -257,11 +344,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function populateSpaces(spaces, selectedId = null) {
         inputs.spaceSelect.innerHTML = '<option value="" disabled selected>Select Space</option>';
-        if (spaces.length > 0) {
-            // Debug if needed
-        } else {
-            console.warn('No spaces found or empty array.');
-        }
+
+        // Add Create New Option
+        const newSpaceOpt = document.createElement('option');
+        newSpaceOpt.value = '__NEW_SPACE__';
+        newSpaceOpt.textContent = '+ Create New Space';
+        newSpaceOpt.style.fontWeight = 'bold';
+        inputs.spaceSelect.appendChild(newSpaceOpt);
+
+        const separator = document.createElement('option');
+        separator.disabled = true;
+        separator.textContent = '----------------';
+        inputs.spaceSelect.appendChild(separator);
 
         spaces.forEach(space => {
             const opt = document.createElement('option');
@@ -343,15 +437,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const data = await response.json();
-        console.log('Full API Response:', data);
 
         if (data.data?.data && Array.isArray(data.data.data)) return data.data.data;
         if (Array.isArray(data.data)) return data.data;
         if (Array.isArray(data)) return data;
         if (data.data?.items && Array.isArray(data.data.items)) return data.data.items;
 
-        console.warn('Could not find array in response', data);
         return [];
+    }
+
+    async function createSpace(baseUrl, name, slug) {
+        const response = await fetch(`${baseUrl}/api/spaces/create`, {
+            method: 'POST',
+            body: JSON.stringify({ name, slug }),
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(`Create Space Failed ${response.status}: ${text}`);
+        }
+
+        return await response.json();
     }
 
     async function importPage(baseUrl, spaceId, file) {
