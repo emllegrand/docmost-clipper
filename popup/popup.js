@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const statusMsg = document.getElementById('status-message');
 
     // Load Settings
-    const stored = await chrome.storage.local.get(['docmostUrl', 'authToken']);
+    const stored = await chrome.storage.local.get(['docmostUrl', 'authToken', 'lastSpaceId']);
 
     // Initialize View
     if (stored.docmostUrl) {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             try {
                 const spaces = await fetchSpaces(stored.docmostUrl, stored.authToken);
                 showView('clipper');
-                populateSpaces(spaces);
+                populateSpaces(spaces, stored.lastSpaceId);
                 initializeClipView();
             } catch (e) {
                 console.warn('Auto-login check failed', e);
@@ -113,17 +113,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         showView('settings');
     });
 
-    // New Exit Settings Listener
     if (buttons.exitSettings) {
         buttons.exitSettings.addEventListener('click', () => {
-            // Only allow exit if we are connected (token exists)
-            // Or just try to switch and let the view state handle it?
-            // If not connected, switching to clipper view might show empty state or error?
-            // But user asked for "Exit settings" to return to previous page.
-            // If previous page was clipper, then yes.
-            // If we just opened popup and it defaulted to settings (because not logged in), 
-            // clicking exit might not be useful, but let's allow it.
-            // It will just show the clipper view.
             showView('clipper');
         });
     }
@@ -171,6 +162,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             await importPage(docmostUrl, spaceId, file);
 
+            // Save the last used space ID
+            await chrome.storage.local.set({ lastSpaceId: spaceId });
+
             showStatus('Page clipped successfully!', 'success');
             setTimeout(() => window.close(), 1500);
 
@@ -217,7 +211,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    function populateSpaces(spaces) {
+    function populateSpaces(spaces, selectedId = null) {
         inputs.spaceSelect.innerHTML = '<option value="" disabled selected>Select Space</option>';
         if (spaces.length > 0) {
             console.log('First space item:', spaces[0]);
@@ -229,8 +223,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const opt = document.createElement('option');
             opt.value = space.id;
             opt.textContent = space.name || space.title || space.slug || 'Unnamed Space';
+            if (selectedId && space.id === selectedId) {
+                opt.selected = true;
+            }
             inputs.spaceSelect.appendChild(opt);
         });
+
+        if (selectedId) {
+            inputs.spaceSelect.value = selectedId;
+        }
     }
 
     async function sendMessageToTab(tabId, message) {
@@ -245,7 +246,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             });
         } catch (error) {
-            // If content script is missing (common after extension reload), try to inject it
             if (error.message.includes('Receiving end does not exist') || error.message.includes('Could not establish connection')) {
                 console.log('Content script not found, injecting...');
                 await chrome.scripting.executeScript({
@@ -253,7 +253,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     files: ['src/libs/Readability.js', 'src/content.js']
                 });
 
-                // Retry message after injection
                 return new Promise((resolve, reject) => {
                     chrome.tabs.sendMessage(tabId, message, (response) => {
                         if (chrome.runtime.lastError) {
