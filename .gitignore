@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# System Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Build/Dist
+dist/
+build/
+
+# Keys & Secrets
+*.pem
+*.key
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

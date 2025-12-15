@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docmost Clipper</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h2>Docmost Clipper</h2>
+    </header>
+
+    <div id="status-message" class="hidden"></div>
+
+    <!-- Settings View -->
+    <div id="settings-view">
+      <div class="form-group">
+        <label for="docmost-url">Docmost URL</label>
+        <input type="url" id="docmost-url" placeholder="https://docmost.example.com">
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-form">
+        <div class="form-group">
+          <label for="auth-email">Email</label>
+          <input type="email" id="auth-email" placeholder="user@example.com">
+        </div>
+        <div class="form-group">
+          <label for="auth-password">Password</label>
+          <input type="password" id="auth-password" placeholder="Password">
+        </div>
+        <button id="save-settings" class="primary-btn">Connect & Save</button>
+      </div>
+
+      <!-- Logout Section (Hidden by default) -->
+      <div id="logout-section" class="hidden">
+        <p class="success-text">✓ Connected</p>
+        <button id="disconnect-btn" class="secondary-btn">Disconnect</button>
+      </div>
+
+      <button id="exit-settings-btn" class="secondary-btn" style="margin-top: 20px;">Exit Settings</button>
+    </div>
+
+    <!-- Clipper View -->
+    <div id="clipper-view" class="hidden">
+      <div class="form-group">
+        <label for="page-title">Title</label>
+        <input type="text" id="page-title">
+      </div>
+
+      <div class="form-group">
+        <label for="space-select">Select Space</label>
+        <select id="space-select">
+          <option value="" disabled selected>Select Space</option>
+        </select>
+      </div>
+
+      <button id="clip-btn" class="primary-btn">Clip to Docmost</button>
+      <button id="settings-btn" class="secondary-btn">Settings</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+
+</html>

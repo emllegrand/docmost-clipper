@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Docmost Clipper",
+  "version": "1.0",
+  "description": "Clip web pages to your self-hosted Docmost instance.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Clip to Docmost"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/libs/Readability.js", "src/content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  }
+}
