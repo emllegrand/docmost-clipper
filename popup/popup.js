@@ -96,12 +96,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- Event Listeners ---
 
     buttons.saveSettings.addEventListener('click', async () => {
-        const url = inputs.url.value.replace(/\/$/, '');
+        const rawUrl = inputs.url.value.trim();
         const email = inputs.email.value.trim();
         const password = inputs.password.value;
 
-        if (!url) {
+        if (!rawUrl) {
             showStatus('Please enter Docmost URL.', 'error');
+            return;
+        }
+
+        // Validate and Normalize URL
+        let url;
+        try {
+            const urlObj = new URL(rawUrl);
+
+            // Strict Protocol Check
+            if (urlObj.protocol !== 'https:' && urlObj.hostname !== 'localhost' && urlObj.hostname !== '127.0.0.1') {
+                showStatus('Security Error: HTTPS is required.', 'error');
+                return;
+            }
+
+            // Path Check (Must be root)
+            if (urlObj.pathname !== '/' && urlObj.pathname !== '') {
+                showStatus('Invalid URL: Please remove paths (e.g. /api) and use the root URL.', 'error');
+                return;
+            }
+
+            // Normalization (removes trailing slash automatically via origin)
+            url = urlObj.origin;
+
+        } catch (e) {
+            showStatus('Invalid URL format. Include http:// or https://', 'error');
             return;
         }
 
