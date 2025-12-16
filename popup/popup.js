@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     let retryAction = null; // Function to call when retry button is clicked
 
     // Load Settings
-    const stored = await chrome.storage.local.get(['docmostUrl', 'authToken', 'lastSpaceId', 'theme']);
+    // Note: We no longer store 'authToken'. We rely on the browser cookie.
+    const stored = await chrome.storage.local.get(['docmostUrl', 'lastSpaceId', 'theme']);
 
     // Apply Theme
     const currentTheme = stored.theme || 'auto';
     applyTheme(currentTheme);
-    // Set selector value if element exists (might need check if view is rendered, but it is static html)
     const themeSelect = document.getElementById('theme-select');
     if (themeSelect) {
         themeSelect.value = currentTheme;
@@ -80,36 +80,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (stored.docmostUrl) {
         inputs.url.value = stored.docmostUrl;
 
-        if (stored.authToken) {
-            toggleLoginState(true);
-            // Attempt Auto-Login
-            loadSpacesWithRetry(stored.docmostUrl, stored.authToken, stored.lastSpaceId);
-        } else {
-            toggleLoginState(false);
-        }
+        // Always probe session on startup if URL is present
+        // passing null as token since we don't use it anymore
+        loadSpacesWithRetry(stored.docmostUrl, null, stored.lastSpaceId);
+    } else {
+        // No URL means definitely not logged in
+        toggleLoginState(false);
     }
 
     // --- Helper Functions ---
 
-    async function loadSpacesWithRetry(url, token, lastSpaceId) {
+    async function loadSpacesWithRetry(url, _unusedToken, lastSpaceId) {
         hideRetry();
         try {
-            const spaces = await fetchSpaces(url, token);
+            // We use fetchSpaces as the "Session Probe"
+            const spaces = await fetchSpaces(url);
+
+            // If we get here, session is VALID
+            toggleLoginState(true);
             showView('clipper');
             populateSpaces(spaces, lastSpaceId);
             initializeClipView();
         } catch (e) {
-            console.warn('Auto-login/Fetch check failed', e);
-            handleApiError(e, () => loadSpacesWithRetry(url, token, lastSpaceId));
+            console.warn('Session probe failed', e);
+            if (e.message.includes('401') || e.message.includes('403')) {
+                // Session Invalid -> Show Login
+                toggleLoginState(false);
+            } else {
+                // Network Error -> Allow Retry
+                handleApiError(e, () => loadSpacesWithRetry(url, null, lastSpaceId));
+            }
         }
     }
 
     function handleApiError(error, retryCallback) {
-        // Status 401/403: Auth failed (Token invalid)
+        // Status 401/403: Auth failed
         if (error.message.includes('401') || error.message.includes('403')) {
             showStatus('Session expired. Please reconnect.', 'error');
-            // Clear invalid token
-            chrome.storage.local.remove('authToken');
             toggleLoginState(false);
             showView('settings');
             return;
@@ -188,13 +195,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             await login(url, email, password);
 
-            const dummyToken = 'cookie-session';
+            // Verify session immediately by fetching spaces
+            const spaces = await fetchSpaces(url);
 
-            const spaces = await fetchSpaces(url, null);
-
+            // SAVE ONLY URL (No fake token)
             await chrome.storage.local.set({
-                docmostUrl: url,
-                authToken: dummyToken
+                docmostUrl: url
             });
 
             toggleLoginState(true);
@@ -205,8 +211,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } catch (err) {
             console.error(err);
-            // If it's a login failure, don't show retry, just show status
-            if (err.message.includes('Login Error')) {
+            if (err.message.includes('Login Error') || err.message.includes('401')) {
                 showStatus('Login failed. Check credentials.', 'error');
             } else {
                 handleApiError(err, () => buttons.saveSettings.click());
