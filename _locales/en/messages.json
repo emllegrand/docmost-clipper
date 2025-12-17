@@ -1,0 +1,167 @@
+{
+    "extName": {
+        "message": "Docmost Clipper"
+    },
+    "extDescription": {
+        "message": "Clip web pages to your self-hosted Docmost instance."
+    },
+    "retryConn": {
+        "message": "↻ Retry Connection"
+    },
+    "lblDocmostUrl": {
+        "message": "Docmost URL"
+    },
+    "phDocmostUrl": {
+        "message": "https://docmost.example.com"
+    },
+    "lblEmail": {
+        "message": "Email"
+    },
+    "phEmail": {
+        "message": "user@example.com"
+    },
+    "lblPassword": {
+        "message": "Password"
+    },
+    "phPassword": {
+        "message": "Password"
+    },
+    "btnConnect": {
+        "message": "Connect"
+    },
+    "msgConnected": {
+        "message": "✓ Connected"
+    },
+    "lblTheme": {
+        "message": "Theme"
+    },
+    "optThemeAuto": {
+        "message": "System (Auto)"
+    },
+    "optThemeLight": {
+        "message": "Light"
+    },
+    "optThemeDark": {
+        "message": "Dark"
+    },
+    "btnSave": {
+        "message": "Save"
+    },
+    "btnDisconnect": {
+        "message": "Disconnect"
+    },
+    "lblTitle": {
+        "message": "Title"
+    },
+    "lblClipSelection": {
+        "message": "Clip Selection Only"
+    },
+    "lblNotes": {
+        "message": "Notes (optional)"
+    },
+    "phNotes": {
+        "message": "Add your thoughts..."
+    },
+    "lblSelectSpace": {
+        "message": "Select Space"
+    },
+    "optSelectSpace": {
+        "message": "Select Space"
+    },
+    "btnClip": {
+        "message": "Clip to Docmost"
+    },
+    "btnSettings": {
+        "message": "Settings"
+    },
+    "headerCreateSpace": {
+        "message": "Create New Space"
+    },
+    "lblSpaceName": {
+        "message": "Space Name"
+    },
+    "phSpaceName": {
+        "message": "e.g. Personal Projects"
+    },
+    "lblSlug": {
+        "message": "Slug:"
+    },
+    "btnCreateSpace": {
+        "message": "Create Space"
+    },
+    "btnCancel": {
+        "message": "Cancel"
+    },
+    "optCreateNewSpace": {
+        "message": "+ Create New Space"
+    },
+    "optUnnamedSpace": {
+        "message": "Unnamed Space"
+    },
+    "statusSessionExpired": {
+        "message": "Session expired. Please reconnect."
+    },
+    "statusNetworkError": {
+        "message": "Network error occurred."
+    },
+    "statusRetrying": {
+        "message": "Retrying..."
+    },
+    "errorEnterUrl": {
+        "message": "Please enter Docmost URL."
+    },
+    "errorHttpsRequired": {
+        "message": "Security Error: HTTPS is required."
+    },
+    "errorInvalidUrlPath": {
+        "message": "Invalid URL: Please remove paths (e.g. /api) and use the root URL."
+    },
+    "errorInvalidUrlFormat": {
+        "message": "Invalid URL format. Include http:// or https://"
+    },
+    "warnHostChange": {
+        "message": "⚠️ Security Warning: You are changing the target server. Click \"Connect\" again to confirm."
+    },
+    "errorEnterEmail": {
+        "message": "Please enter Email and Password."
+    },
+    "statusConnecting": {
+        "message": "Connecting..."
+    },
+    "statusConnected": {
+        "message": "Connected successfully!"
+    },
+    "errorLoginFailed": {
+        "message": "Login failed. Check credentials."
+    },
+    "statusDisconnected": {
+        "message": "Disconnected."
+    },
+    "errorNameLength": {
+        "message": "Name must be at least 2 characters."
+    },
+    "statusCreating": {
+        "message": "Creating..."
+    },
+    "statusSpaceCreated": {
+        "message": "Space created!"
+    },
+    "errorSelectSpace": {
+        "message": "Please select a Space."
+    },
+    "errorNoContent": {
+        "message": "No content loaded. Please retry."
+    },
+    "statusClipping": {
+        "message": "Clipping..."
+    },
+    "statusExtracting": {
+        "message": "Extracting content..."
+    },
+    "statusUploading": {
+        "message": "Uploading to Docmost..."
+    },
+    "statusClipped": {
+        "message": "Page clipped successfully!"
+    }
+}

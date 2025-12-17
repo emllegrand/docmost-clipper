@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     // UI Elements
+    translatePage();
+
     const inputs = {
         url: document.getElementById('docmost-url'),
         email: document.getElementById('auth-email'),
@@ -116,14 +118,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     function handleApiError(error, retryCallback) {
         // Status 401/403: Auth failed
         if (error.message.includes('401') || error.message.includes('403')) {
-            showStatus('Session expired. Please reconnect.', 'error');
+            showStatus(chrome.i18n.getMessage('statusSessionExpired'), 'error');
             toggleLoginState(false);
             showView('settings');
             return;
         }
 
         // Network or other errors
-        showStatus(error.message || 'Network error occurred.', 'error');
+        showStatus(error.message || chrome.i18n.getMessage('statusNetworkError'), 'error');
 
         if (retryCallback) {
             retryAction = retryCallback;
@@ -140,7 +142,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     buttons.retry.addEventListener('click', () => {
         if (retryAction) {
-            showStatus('Retrying...', 'success');
+            showStatus(chrome.i18n.getMessage('statusRetrying'), 'success');
             const action = retryAction; // Copy ref
             hideRetry(); // Hide before executing
             action();
@@ -156,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const password = inputs.password.value;
 
         if (!rawUrl) {
-            showStatus('Please enter Docmost URL.', 'error');
+            showStatus(chrome.i18n.getMessage('errorEnterUrl'), 'error');
             return;
         }
 
@@ -168,13 +170,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Strict Protocol Check
             if (urlObj.protocol !== 'https:' && urlObj.hostname !== 'localhost' && urlObj.hostname !== '127.0.0.1') {
-                showStatus('Security Error: HTTPS is required.', 'error');
+                showStatus(chrome.i18n.getMessage('errorHttpsRequired'), 'error');
                 return;
             }
 
             // Path Check (Must be root)
             if (urlObj.pathname !== '/' && urlObj.pathname !== '') {
-                showStatus('Invalid URL: Please remove paths (e.g. /api) and use the root URL.', 'error');
+                showStatus(chrome.i18n.getMessage('errorInvalidUrlPath'), 'error');
                 return;
             }
 
@@ -183,7 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             newHostname = urlObj.hostname;
 
         } catch (e) {
-            showStatus('Invalid URL format. Include http:// or https://', 'error');
+            showStatus(chrome.i18n.getMessage('errorInvalidUrlFormat'), 'error');
             return;
         }
 
@@ -196,7 +198,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (oldUrlObj.hostname !== newHostname) {
                     if (pendingUrlChange !== newHostname) {
                         pendingUrlChange = newHostname;
-                        showStatus('⚠️ Security Warning: You are changing the target server. Click "Connect" again to confirm.', 'error');
+                        showStatus(chrome.i18n.getMessage('warnHostChange'), 'error');
                         return; // BLOCK first attempt
                     }
                 }
@@ -208,14 +210,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         pendingUrlChange = null;
 
 
+
         if (!email || !password) {
-            showStatus('Please enter Email and Password.', 'error');
+            showStatus(chrome.i18n.getMessage('errorEnterEmail'), 'error');
             return;
         }
 
         buttons.saveSettings.disabled = true;
-        buttons.saveSettings.textContent = 'Connecting...';
-        showStatus('Connecting...', 'success');
+        buttons.saveSettings.textContent = chrome.i18n.getMessage('statusConnecting');
+        showStatus(chrome.i18n.getMessage('statusConnecting'), 'success');
         hideRetry();
 
         try {
@@ -232,19 +235,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             toggleLoginState(true);
             showView('clipper');
             populateSpaces(spaces);
-            showStatus('Connected successfully!', 'success');
+            showStatus(chrome.i18n.getMessage('statusConnected'), 'success');
             initializeClipView();
 
         } catch (err) {
             console.error(err);
             if (err.message.includes('Login Error') || err.message.includes('401')) {
-                showStatus('Login failed. Check credentials.', 'error');
+                showStatus(chrome.i18n.getMessage('errorLoginFailed'), 'error');
             } else {
                 handleApiError(err, () => buttons.saveSettings.click());
             }
         } finally {
             buttons.saveSettings.disabled = false;
-            buttons.saveSettings.textContent = 'Connect';
+            buttons.saveSettings.textContent = chrome.i18n.getMessage('btnConnect');
         }
     });
 
@@ -253,7 +256,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         toggleLoginState(false);
         inputs.email.value = '';
         inputs.password.value = '';
-        showStatus('Disconnected.', 'success');
+        showStatus(chrome.i18n.getMessage('statusDisconnected'), 'success');
         hideRetry();
     });
 
@@ -321,12 +324,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const slug = inputs.newSpaceSlug.textContent;
 
         if (!name || name.length < 2) {
-            showStatus('Name must be at least 2 characters.', 'error');
+            showStatus(chrome.i18n.getMessage('errorNameLength'), 'error');
             return;
         }
 
         buttons.confirmCreateSpace.disabled = true;
-        buttons.confirmCreateSpace.textContent = 'Creating...';
+        buttons.confirmCreateSpace.textContent = chrome.i18n.getMessage('statusCreating');
         hideRetry();
 
         try {
@@ -346,14 +349,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const newSpace = spaces.find(s => s.slug === slug);
             populateSpaces(spaces, newSpace ? newSpace.id : null);
 
-            showStatus(`Space "${name}" created!`, 'success');
+            showStatus(chrome.i18n.getMessage('statusSpaceCreated'), 'success');
 
         } catch (err) {
             console.error(err);
             handleApiError(err, () => buttons.confirmCreateSpace.click());
         } finally {
             buttons.confirmCreateSpace.disabled = false;
-            buttons.confirmCreateSpace.textContent = 'Create Space';
+            buttons.confirmCreateSpace.textContent = chrome.i18n.getMessage('btnCreateSpace');
         }
     });
 
@@ -361,18 +364,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     buttons.clip.addEventListener('click', async () => {
         const spaceId = inputs.spaceSelect.value;
         if (!spaceId || spaceId === '__NEW_SPACE__') {
-            showStatus('Please select a Space.', 'error');
+            showStatus(chrome.i18n.getMessage('errorSelectSpace'), 'error');
             return;
         }
 
         if (!currentContentData) {
-            showStatus('No content loaded. Please retry.', 'error');
+            showStatus(chrome.i18n.getMessage('errorNoContent'), 'error');
             return;
         }
 
         buttons.clip.disabled = true;
-        buttons.clip.textContent = 'Clipping...';
-        showStatus('Extracting content...', 'success');
+        buttons.clip.textContent = chrome.i18n.getMessage('statusClipping');
+        showStatus(chrome.i18n.getMessage('statusExtracting'), 'success');
         hideRetry();
 
         try {
@@ -422,14 +425,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const fileName = `${sanitizedTitle}.html`;
             const file = new File([blob], fileName, { type: 'text/html' });
 
-            showStatus('Uploading to Docmost...', 'success');
+            showStatus(chrome.i18n.getMessage('statusUploading'), 'success');
 
             await importPage(docmostUrl, spaceId, file);
 
             // Save the last used space ID
             await chrome.storage.local.set({ lastSpaceId: spaceId });
 
-            showStatus('Page clipped successfully!', 'success');
+            showStatus(chrome.i18n.getMessage('statusClipped'), 'success');
             setTimeout(() => window.close(), 1500);
 
         } catch (err) {
@@ -437,11 +440,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Allow retry of clip
             handleApiError(err, () => buttons.clip.click());
             buttons.clip.disabled = false;
-            buttons.clip.textContent = 'Clip to Docmost';
+            buttons.clip.textContent = chrome.i18n.getMessage('btnClip');
         }
     });
 
     // --- Helper Utils ---
+
+    function translatePage() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const message = chrome.i18n.getMessage(key);
+            if (message) el.textContent = message;
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            const message = chrome.i18n.getMessage(key);
+            if (message) el.placeholder = message;
+        });
+    }
 
     function escapeHtml(text) {
         if (!text) return '';
@@ -509,12 +525,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function populateSpaces(spaces, selectedId = null) {
-        inputs.spaceSelect.innerHTML = '<option value="" disabled selected>Select Space</option>';
+        inputs.spaceSelect.innerHTML = `<option value="" disabled selected>${chrome.i18n.getMessage('optSelectSpace')}</option>`;
 
         // Add Create New Option
         const newSpaceOpt = document.createElement('option');
         newSpaceOpt.value = '__NEW_SPACE__';
-        newSpaceOpt.textContent = '+ Create New Space';
+        newSpaceOpt.textContent = chrome.i18n.getMessage('optCreateNewSpace');
         newSpaceOpt.style.fontWeight = 'bold';
         inputs.spaceSelect.appendChild(newSpaceOpt);
 
@@ -526,7 +542,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         spaces.forEach(space => {
             const opt = document.createElement('option');
             opt.value = space.id;
-            opt.textContent = space.name || space.title || space.slug || 'Unnamed Space';
+            opt.textContent = space.name || space.title || space.slug || chrome.i18n.getMessage('optUnnamedSpace');
             if (selectedId && space.id === selectedId) {
                 opt.selected = true;
             }

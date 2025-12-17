@@ -1,0 +1,167 @@
+{
+    "extName": {
+        "message": "Docmost Clipper"
+    },
+    "extDescription": {
+        "message": "Enregistrez des pages web dans votre instance Docmost auto-hébergée."
+    },
+    "retryConn": {
+        "message": "↻ Réessayer la connexion"
+    },
+    "lblDocmostUrl": {
+        "message": "URL Docmost"
+    },
+    "phDocmostUrl": {
+        "message": "https://docmost.exemple.com"
+    },
+    "lblEmail": {
+        "message": "Email"
+    },
+    "phEmail": {
+        "message": "utilisateur@exemple.com"
+    },
+    "lblPassword": {
+        "message": "Mot de passe"
+    },
+    "phPassword": {
+        "message": "Mot de passe"
+    },
+    "btnConnect": {
+        "message": "Connexion"
+    },
+    "msgConnected": {
+        "message": "✓ Connecté"
+    },
+    "lblTheme": {
+        "message": "Thème"
+    },
+    "optThemeAuto": {
+        "message": "Système (Auto)"
+    },
+    "optThemeLight": {
+        "message": "Clair"
+    },
+    "optThemeDark": {
+        "message": "Sombre"
+    },
+    "btnSave": {
+        "message": "Enregistrer"
+    },
+    "btnDisconnect": {
+        "message": "Déconnexion"
+    },
+    "lblTitle": {
+        "message": "Titre"
+    },
+    "lblClipSelection": {
+        "message": "Sélection uniquement"
+    },
+    "lblNotes": {
+        "message": "Notes (optionnel)"
+    },
+    "phNotes": {
+        "message": "Ajoutez vos pensées..."
+    },
+    "lblSelectSpace": {
+        "message": "Choisir un Espace"
+    },
+    "optSelectSpace": {
+        "message": "Choisir un Espace"
+    },
+    "btnClip": {
+        "message": "Clipper dans Docmost"
+    },
+    "btnSettings": {
+        "message": "Paramètres"
+    },
+    "headerCreateSpace": {
+        "message": "Créer un nouvel Espace"
+    },
+    "lblSpaceName": {
+        "message": "Nom de l'Espace"
+    },
+    "phSpaceName": {
+        "message": "ex. Projet Perso"
+    },
+    "lblSlug": {
+        "message": "Slug :"
+    },
+    "btnCreateSpace": {
+        "message": "Créer l'Espace"
+    },
+    "btnCancel": {
+        "message": "Annuler"
+    },
+    "optCreateNewSpace": {
+        "message": "+ Créer un nouvel Espace"
+    },
+    "optUnnamedSpace": {
+        "message": "Espace sans nom"
+    },
+    "statusSessionExpired": {
+        "message": "Session expirée. Veuillez vous reconnecter."
+    },
+    "statusNetworkError": {
+        "message": "Erreur réseau survenue."
+    },
+    "statusRetrying": {
+        "message": "Nouvelle tentative..."
+    },
+    "errorEnterUrl": {
+        "message": "Veuillez entrer une URL Docmost."
+    },
+    "errorHttpsRequired": {
+        "message": "Erreur Sécurité : HTTPS est requis."
+    },
+    "errorInvalidUrlPath": {
+        "message": "URL Invalide : Veuillez retirer les chemins (ex. /api) et utiliser l'URL racine."
+    },
+    "errorInvalidUrlFormat": {
+        "message": "Format d'URL invalide. Inclure http:// ou https://"
+    },
+    "warnHostChange": {
+        "message": "⚠️ Alerte Sécurité : Vous changez de serveur cible. Cliquez à nouveau sur \"Connexion\" pour confirmer."
+    },
+    "errorEnterEmail": {
+        "message": "Veuillez entrer Email et Mot de passe."
+    },
+    "statusConnecting": {
+        "message": "Connexion en cours..."
+    },
+    "statusConnected": {
+        "message": "Connecté avec succès !"
+    },
+    "errorLoginFailed": {
+        "message": "Échec de connexion. Vérifiez vos identifiants."
+    },
+    "statusDisconnected": {
+        "message": "Déconnecté."
+    },
+    "errorNameLength": {
+        "message": "Le nom doit faire au moins 2 caractères."
+    },
+    "statusCreating": {
+        "message": "Création en cours..."
+    },
+    "statusSpaceCreated": {
+        "message": "Espace créé !"
+    },
+    "errorSelectSpace": {
+        "message": "Veuillez sélectionner un Espace."
+    },
+    "errorNoContent": {
+        "message": "Aucun contenu chargé. Veuillez réessayer."
+    },
+    "statusClipping": {
+        "message": "Clipping en cours..."
+    },
+    "statusExtracting": {
+        "message": "Extraction du contenu..."
+    },
+    "statusUploading": {
+        "message": "Envoi vers Docmost..."
+    },
+    "statusClipped": {
+        "message": "Page clippée avec succès !"
+    }
+}

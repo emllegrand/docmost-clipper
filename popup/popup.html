@@ -11,97 +11,103 @@
 <body>
   <div class="container">
     <header>
-      <h2>Docmost Clipper</h2>
+      <h2 data-i18n="extName">Docmost Clipper</h2>
     </header>
 
     <div id="status-message" class="hidden"></div>
 
     <div id="retry-container" class="hidden" style="text-align: center; margin-bottom: 12px;">
-      <button id="retry-btn" class="secondary-btn" style="width: auto; padding: 4px 12px; font-size: 12px;">↻ Retry
+      <button id="retry-btn" class="secondary-btn" style="width: auto; padding: 4px 12px; font-size: 12px;"
+        data-i18n="retryConn">↻ Retry
         Connection</button>
     </div>
 
     <!-- Settings View -->
     <div id="settings-view">
       <div class="form-group">
-        <label for="docmost-url">Docmost URL</label>
-        <input type="url" id="docmost-url" placeholder="https://docmost.example.com">
+        <label for="docmost-url" data-i18n="lblDocmostUrl">Docmost URL</label>
+        <input type="url" id="docmost-url" data-i18n-placeholder="phDocmostUrl"
+          placeholder="https://docmost.example.com">
       </div>
 
       <!-- Login Form -->
       <div id="login-form">
         <div class="form-group">
-          <label for="auth-email">Email</label>
-          <input type="email" id="auth-email" placeholder="user@example.com">
+          <label for="auth-email" data-i18n="lblEmail">Email</label>
+          <input type="email" id="auth-email" data-i18n-placeholder="phEmail" placeholder="user@example.com">
         </div>
         <div class="form-group">
-          <label for="auth-password">Password</label>
-          <input type="password" id="auth-password" placeholder="Password">
+          <label for="auth-password" data-i18n="lblPassword">Password</label>
+          <input type="password" id="auth-password" data-i18n-placeholder="phPassword" placeholder="Password">
         </div>
-        <button id="save-settings" class="primary-btn">Connect</button>
+        <button id="save-settings" class="primary-btn" data-i18n="btnConnect">Connect</button>
       </div>
 
       <!-- Logout Section (Hidden by default) -->
       <div id="logout-section" class="hidden">
-        <p class="success-text">✓ Connected</p>
+        <p class="success-text" data-i18n="msgConnected">✓ Connected</p>
       </div>
 
       <div class="form-group">
-        <label for="theme-select">Theme</label>
+        <label for="theme-select" data-i18n="lblTheme">Theme</label>
         <select id="theme-select">
-          <option value="auto">System (Auto)</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
+          <option value="auto" data-i18n="optThemeAuto">System (Auto)</option>
+          <option value="light" data-i18n="optThemeLight">Light</option>
+          <option value="dark" data-i18n="optThemeDark">Dark</option>
         </select>
       </div>
 
-      <button id="save-exit-settings-btn" class="primary-btn" style="margin-top: 20px;">Save</button>
+      <button id="save-exit-settings-btn" class="primary-btn" style="margin-top: 20px;"
+        data-i18n="btnSave">Save</button>
       <button id="disconnect-btn" class="secondary-btn hidden"
-        style="margin-top: 10px; border-color: transparent; color: #cf222e;">Disconnect</button>
+        style="margin-top: 10px; border-color: transparent; color: #cf222e;"
+        data-i18n="btnDisconnect">Disconnect</button>
     </div>
 
     <!-- Clipper View -->
     <div id="clipper-view" class="hidden">
       <div class="form-group">
-        <label for="page-title">Title</label>
+        <label for="page-title" data-i18n="lblTitle">Title</label>
         <input type="text" id="page-title">
       </div>
 
       <div id="selection-group" class="form-group hidden">
         <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
           <input type="checkbox" id="clip-selection" style="width: auto;">
-          <span>Clip Selection Only</span>
+          <span data-i18n="lblClipSelection">Clip Selection Only</span>
         </label>
       </div>
 
       <div class="form-group">
-        <label for="user-notes">Notes (optional)</label>
-        <textarea id="user-notes" rows="3" placeholder="Add your thoughts..."></textarea>
+        <label for="user-notes" data-i18n="lblNotes">Notes (optional)</label>
+        <textarea id="user-notes" rows="3" data-i18n-placeholder="phNotes"
+          placeholder="Add your thoughts..."></textarea>
       </div>
 
       <div class="form-group">
-        <label for="space-select">Select Space</label>
+        <label for="space-select" data-i18n="lblSelectSpace">Select Space</label>
         <select id="space-select">
-          <option value="" disabled selected>Select Space</option>
+          <option value="" disabled selected data-i18n="optSelectSpace">Select Space</option>
         </select>
       </div>
 
-      <button id="clip-btn" class="primary-btn">Clip to Docmost</button>
-      <button id="settings-btn" class="secondary-btn">Settings</button>
+      <button id="clip-btn" class="primary-btn" data-i18n="btnClip">Clip to Docmost</button>
+      <button id="settings-btn" class="secondary-btn" data-i18n="btnSettings">Settings</button>
     </div>
 
     <!-- Create Space View -->
     <div id="create-space-view" class="hidden">
-      <h3>Create New Space</h3>
+      <h3 data-i18n="headerCreateSpace">Create New Space</h3>
       <div class="form-group">
-        <label for="new-space-name">Space Name</label>
-        <input type="text" id="new-space-name" placeholder="e.g. Personal Projects">
+        <label for="new-space-name" data-i18n="lblSpaceName">Space Name</label>
+        <input type="text" id="new-space-name" data-i18n-placeholder="phSpaceName" placeholder="e.g. Personal Projects">
       </div>
       <div class="form-group">
-        <label style="font-size: 11px; color: #57606a;">Slug: <span id="new-space-slug"></span></label>
+        <label style="font-size: 11px; color: #57606a;"><span data-i18n="lblSlug">Slug:</span> <span
+            id="new-space-slug"></span></label>
       </div>
-      <button id="confirm-create-space" class="primary-btn">Create Space</button>
-      <button id="cancel-create-space" class="secondary-btn">Cancel</button>
+      <button id="confirm-create-space" class="primary-btn" data-i18n="btnCreateSpace">Create Space</button>
+      <button id="cancel-create-space" class="secondary-btn" data-i18n="btnCancel">Cancel</button>
     </div>
   </div>
   <script src="popup.js"></script>
