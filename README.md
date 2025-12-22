@@ -18,7 +18,7 @@ A secure Chrome extension to clip web pages, articles, and selections directly t
     - **Create New Space** directly from the extension dropdown.
 - **🌗 Theme Customization**: Native support for **Dark Mode**, **Light Mode**, or automatic System Sync.
 - **⚡ Robustness**: Built-in network error handling and retry mechanisms.
-- **🌍 Internationalization**: Fully localized interface. Currently supports **English** and **French**.
+- **🌍 Internationalization**: Fully localized interface. Currently supports **English**, **French** and **Chinese** (thanks to XJY00  - https://github.com/XJY00). 
 
 ## 🛠 Installation
 

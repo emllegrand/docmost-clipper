@@ -1,0 +1,167 @@
+{
+    "extName": {
+        "message": "Docmost 剪切工具"
+    },
+    "extDescription": {
+        "message": "将网页剪切到您自托管的Docmost实例。"
+    },
+    "retryConn": {
+        "message": "↻ 重试连接"
+    },
+    "lblDocmostUrl": {
+        "message": "Docmost 网址"
+    },
+    "phDocmostUrl": {
+        "message": "https://docmost.example.com"
+    },
+    "lblEmail": {
+        "message": "电子邮箱"
+    },
+    "phEmail": {
+        "message": "user@example.com"
+    },
+    "lblPassword": {
+        "message": "密码"
+    },
+    "phPassword": {
+        "message": "密码"
+    },
+    "btnConnect": {
+        "message": "连接"
+    },
+    "msgConnected": {
+        "message": "✓ 已连接"
+    },
+    "lblTheme": {
+        "message": "主题"
+    },
+    "optThemeAuto": {
+        "message": "系统（自动）"
+    },
+    "optThemeLight": {
+        "message": "浅色"
+    },
+    "optThemeDark": {
+        "message": "深色"
+    },
+    "btnSave": {
+        "message": "保存"
+    },
+    "btnDisconnect": {
+        "message": "断开连接"
+    },
+    "lblTitle": {
+        "message": "标题"
+    },
+    "lblClipSelection": {
+        "message": "仅剪切选定内容"
+    },
+    "lblNotes": {
+        "message": "备注（可选）"
+    },
+    "phNotes": {
+        "message": "添加您的想法..."
+    },
+    "lblSelectSpace": {
+        "message": "选择空间"
+    },
+    "optSelectSpace": {
+        "message": "选择空间"
+    },
+    "btnClip": {
+        "message": "剪切到Docmost"
+    },
+    "btnSettings": {
+        "message": "设置"
+    },
+    "headerCreateSpace": {
+        "message": "创建新空间"
+    },
+    "lblSpaceName": {
+        "message": "空间名称"
+    },
+    "phSpaceName": {
+        "message": "例如：个人项目"
+    },
+    "lblSlug": {
+        "message": "别名："
+    },
+    "btnCreateSpace": {
+        "message": "创建空间"
+    },
+    "btnCancel": {
+        "message": "取消"
+    },
+    "optCreateNewSpace": {
+        "message": "+ 创建新空间"
+    },
+    "optUnnamedSpace": {
+        "message": "未命名空间"
+    },
+    "statusSessionExpired": {
+        "message": "会话已过期。请重新连接。"
+    },
+    "statusNetworkError": {
+        "message": "发生网络错误。"
+    },
+    "statusRetrying": {
+        "message": "正在重试..."
+    },
+    "errorEnterUrl": {
+        "message": "请输入Docmost网址。"
+    },
+    "errorHttpsRequired": {
+        "message": "安全错误：需要HTTPS。"
+    },
+    "errorInvalidUrlPath": {
+        "message": "无效URL：请移除路径（例如/api）并使用根URL。"
+    },
+    "errorInvalidUrlFormat": {
+        "message": "无效的URL格式。请包含http://或https://"
+    },
+    "warnHostChange": {
+        "message": "⚠️ 安全警告：您正在更改目标服务器。请再次点击\"连接\"确认。"
+    },
+    "errorEnterEmail": {
+        "message": "请输入电子邮箱和密码。"
+    },
+    "statusConnecting": {
+        "message": "正在连接..."
+    },
+    "statusConnected": {
+        "message": "连接成功！"
+    },
+    "errorLoginFailed": {
+        "message": "登录失败。请检查凭据。"
+    },
+    "statusDisconnected": {
+        "message": "已断开连接。"
+    },
+    "errorNameLength": {
+        "message": "名称至少需要2个字符。"
+    },
+    "statusCreating": {
+        "message": "正在创建..."
+    },
+    "statusSpaceCreated": {
+        "message": "空间创建成功！"
+    },
+    "errorSelectSpace": {
+        "message": "请选择一个空间。"
+    },
+    "errorNoContent": {
+        "message": "未加载内容。请重试。"
+    },
+    "statusClipping": {
+        "message": "正在剪切..."
+    },
+    "statusExtracting": {
+        "message": "正在提取内容..."
+    },
+    "statusUploading": {
+        "message": "正在上传到Docmost..."
+    },
+    "statusClipped": {
+        "message": "页面剪切成功！"
+    }
+}
